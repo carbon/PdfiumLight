@@ -230,7 +230,7 @@ namespace PdfiumLight
             }
         }
 
-        public unsafe static FS_RECTF FPDF_GetMediaBox(IntPtr page)
+        public static FS_RECTF FPDF_GetMediaBox(IntPtr page)
         {
             lock (LockString)
             {
@@ -240,7 +240,7 @@ namespace PdfiumLight
             }
         }
 
-        public unsafe static FS_RECTF FPDF_GetCropBox(IntPtr page)
+        public static FS_RECTF FPDF_GetCropBox(IntPtr page)
         {
             lock (LockString)
             {
