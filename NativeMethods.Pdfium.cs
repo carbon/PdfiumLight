@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -218,6 +219,34 @@ namespace PdfiumLight
             lock (LockString)
             {
                 return Imports.FPDF_GetPageHeight(page);
+            }
+        }
+
+        public static int FPDF_GetPageRotation(IntPtr page)
+        {
+            lock (LockString)
+            {
+                return Imports.FPDFPage_GetRotation(page);
+            }
+        }
+
+        public unsafe static FS_RECTF FPDF_GetMediaBox(IntPtr page)
+        {
+            lock (LockString)
+            {
+                Imports.FPDFPage_GetMediaBox(page, out var left, out var top, out var right, out var bottom);
+
+                return new FS_RECTF { left = left, top = top, right = right, bottom = bottom };
+            }
+        }
+
+        public unsafe static FS_RECTF FPDF_GetCropBox(IntPtr page)
+        {
+            lock (LockString)
+            {
+                Imports.FPDFPage_GetCropBox(page, out var left, out var top, out var right, out var bottom);
+
+                return new FS_RECTF { left = left, top = top, right = right, bottom = bottom };
             }
         }
 
@@ -598,8 +627,6 @@ namespace PdfiumLight
             }
         }
 
-
-
         public static void FPDF_FFLDraw(IntPtr form, IntPtr bitmap, IntPtr page, int start_x, int start_y, int size_x, int size_y, int rotate, FPDF flags)
         {
             lock (LockString)
@@ -875,6 +902,12 @@ namespace PdfiumLight
 
             [DllImport("pdfium.dll")]
             public static extern int FPDFPage_GetRotation(IntPtr page);
+
+            [DllImport("pdfium.dll")]
+            public static extern bool FPDFPage_GetMediaBox(IntPtr page, out float left, out float top, out float right, out float bottom);
+
+            [DllImport("pdfium.dll")]
+            public static extern bool FPDFPage_GetCropBox(IntPtr page, out float left, out float top, out float right, out float bottom);
 
             [DllImport("pdfium.dll")]
             public static extern void FPDFPage_SetRotation(IntPtr page, int rotate);

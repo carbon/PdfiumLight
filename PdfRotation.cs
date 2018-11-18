@@ -8,18 +8,21 @@
         /// <summary>
         /// Rotates the output 0 degrees.
         /// </summary>
-        Rotate0,
+        Rotate0 = 0,
+
         /// <summary>
         /// Rotates the output 90 degrees.
         /// </summary>
-        Rotate90,
+        Rotate90 = 1,
+
         /// <summary>
         /// Rotates the output 180 degrees.
         /// </summary>
-        Rotate180,
+        Rotate180 = 2,
+
         /// <summary>
         /// Rotates the output 270 degrees.
         /// </summary>
-        Rotate270
+        Rotate270 = 3
     }
 }

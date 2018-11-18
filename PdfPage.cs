@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Text;
@@ -32,12 +31,18 @@ namespace PdfiumLight
         public double Width { get; private set; }
 
         /// <summary>
-        /// Height of th page in pt
+        /// Height of the page in pt
         /// </summary>
         public double Height { get; private set; }
 
+        
         /// <summary>
-        /// The index og this page in the document
+        /// The rotation of the page
+        /// </summary>
+        public PdfRotation Rotation { get; private set; }
+
+        /// <summary>
+        /// The index of this page in the document
         /// </summary>
         public int PageNumber { get; private set; }
 
@@ -60,6 +65,7 @@ namespace PdfiumLight
 
             Width = NativeMethods.FPDF_GetPageWidth(Page);
             Height = NativeMethods.FPDF_GetPageHeight(Page);
+            Rotation = (PdfRotation)NativeMethods.FPDF_GetPageRotation(Page);
         }
 
         /// <summary>
@@ -76,6 +82,38 @@ namespace PdfiumLight
 
                 _disposed = true;
             }
+        }
+
+        // <summary>
+        /// Returns the media box dimensions. This will call a native Pdfium function.
+        /// </summary>
+        /// <returns></returns>
+        public RectangleF GetMediaBox()
+        {
+            var box = NativeMethods.FPDF_GetMediaBox(Page);
+
+            return new RectangleF(
+                box.left,
+                box.top,
+                (box.right - box.left),
+                (box.bottom - box.top)
+           );
+        }
+
+        // <summary>
+        /// Returns the crop box dimensions. This will call a native Pdfium function.
+        /// </summary>
+        /// <returns></returns>
+        public RectangleF GetCropBox()
+        {
+            var box = NativeMethods.FPDF_GetCropBox(Page);
+
+            return new RectangleF(
+                box.left,
+                box.top,
+                (box.right - box.left),
+                (box.bottom - box.top)
+           );
         }
 
         private RectangleF GetBounds(int index)
